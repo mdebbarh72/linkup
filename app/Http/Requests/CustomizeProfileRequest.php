@@ -30,7 +30,7 @@ class CustomizeProfileRequest extends FormRequest
                 'max:500',
             ],
 
-            'avatar' => [
+            'lien_photo' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',

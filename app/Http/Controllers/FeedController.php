@@ -4,11 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+
 
 class FeedController extends Controller
 {
     public function index(): View
     {
-        return view('feed');
+        $user = auth()->user();
+        
+        $friendIds = $user->allFriends()->pluck('id');
+        $friendIds = $user->allFriends()->pluck('id');
+
+        $posts = \App\Models\Post::whereIn('user_id', $friendIds)
+            ->with(['user.profile', 'images', 'likes', 'comments'])
+            ->latest()
+            ->paginate(10);
+
+        return view('feed', [
+            'posts' => $posts
+        ]);
     }
 }

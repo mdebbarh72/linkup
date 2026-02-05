@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Session;
 use App\Models\PasswordResetToken;
+use App\Models\Comment;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -48,7 +49,6 @@ class User extends Authenticatable implements MustVerifyEmail
             $user->profile()->create([
                 'pseudo' => null,
                 'bio' => null,
-                'lien_photo' => null,
             ]);
         });
     }
@@ -62,8 +62,8 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getAvatarUrlAttribute()
     {
-        if ($this->profile && $this->profile->lien_photo) {
-            $path = 'storage/' . $this->profile->lien_photo;
+        if ($this->profile && $this->profile->image) {
+            $path = 'storage/' . $this->profile->image->path;
             if (file_exists(public_path($path))) {
                 return asset($path);
             }
@@ -126,6 +126,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->friendsAsUser1->merge($this->friendsAsUser2)->unique('id')->values();
     }
 
+    public function friendsCount()
+    {
+        return $this->friendsAsUser1->merge($this->friendsAsUser2)->unique('id')->values()->count();
+    }
+
 
 
     /**
@@ -142,6 +147,21 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     use Notifiable;
+
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
 
 
 }

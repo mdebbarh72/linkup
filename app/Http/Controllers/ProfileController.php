@@ -66,18 +66,27 @@ public function customize(CustomizeProfileRequest $request)
     
     $profile = $user->profile()->firstOrCreate([]); 
 
-    $data = [
-        'bio' => $request->validated('bio'),
-    ];
+    $profile = $user->profile()->firstOrCreate([]); 
+
+    $data = $request->safe()->except(['lien_photo']);
 
     
     if ($request->hasFile('lien_photo')) {
         
-        if ($profile->avatar) {
-            Storage::disk('public')->delete($profile->avatar);
-        }
+        $path = $request->file('lien_photo')->store('profiles', 'public');
 
-        $data['lien_photo'] = $request->file('lien_photo')->store('lien_photo', 'public');
+        if ($profile->image) {
+            Storage::disk('public')->delete($profile->image->path);
+            $profile->image->update([
+                'path' => $path,
+                'disk' => 'public'
+            ]);
+        } else {
+            $profile->image()->create([
+                'path' => $path,
+                'disk' => 'public'
+            ]);
+        }
     }
 
     $profile->update($data);
@@ -106,5 +115,20 @@ public function customize(CustomizeProfileRequest $request)
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function show(\App\Models\User $user): View
+    {
+        $posts = $user->posts()
+            ->with(['images', 'likes', 'comments'])
+            ->latest()
+            ->get();
+
+        return view('profile.show', [
+            'user' => $user,
+            'posts' => $posts,
+            'friendsCount' => $user->allFriends()->count(),
+            'postsCount' => $user->posts()->count(),
+        ]);
     }
 }

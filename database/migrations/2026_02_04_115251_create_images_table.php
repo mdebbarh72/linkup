@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('name', 'first_name');
-            $table->string('last_name')->nullable()->after('first_name');
+        Schema::create('images', function (Blueprint $table) {
+            $table->id();
+            $table->morphs('imageable');
+            $table->string('path');
+            $table->string('disk')->default('public');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->renameColumn('first_name', 'name');
-        });
+        Schema::dropIfExists('images');
     }
 };

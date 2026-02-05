@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Services\FriendshipService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class FriendController extends Controller
 {

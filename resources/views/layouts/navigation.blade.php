@@ -20,11 +20,11 @@
         
         <div class="flex justify-center gap-6 text-sm">
             <div class="text-center">
-                <span class="block font-bold text-slate-900">12</span>
+                <span class="block font-bold text-slate-900">{{ Auth::user()->posts()->count() }}</span>
                 <span class="text-slate-400 text-xs">Posts</span>
             </div>
             <div class="text-center">
-                <span class="block font-bold text-slate-900">48</span>
+                <span class="block font-bold text-slate-900">{{ Auth::user()->friendsCount() }}</span>
                 <span class="text-slate-400 text-xs">Friends</span>
             </div>
         </div>
@@ -32,32 +32,24 @@
 
     <!-- Navigation Links -->
     <div class="space-y-1 px-2">
+        <a href="{{ route('profile.show', Auth::user()) }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('profile.show') && request()->route('user')->id === Auth::id() ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span class="font-bold text-sm">My Profile</span>
+        </a>
+
         <a href="{{ route('feed') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('feed') ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" x2="12" y1="3" y2="15"/></svg>
-            <span class="font-bold text-sm">News Feed</span>
+            <span class="font-bold text-sm">Feed</span>
+        </a>
+
+        <a href="{{ route('friends.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('friends.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <span class="font-bold text-sm">Friends</span>
         </a>
 
         <a href="{{ route('search') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('search') ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <span class="font-bold text-sm">Explore</span>
-        </a>
-
-        <a href="{{ route('friends.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('friends.*') ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
-            <div class="relative">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                @if(false)
-                    <span class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border border-white"></span>
-                @endif
-            </div>
-            <span class="font-bold text-sm">Friends</span>
-            @if(false)
-                <span class="ml-auto bg-rose-500 text-white text-[10px] px-1.5 py-0.5 rounded-md font-bold">0</span>
-            @endif
-        </a>
-
-        <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-2xl transition duration-200 {{ request()->routeIs('profile.edit') ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20' : 'text-slate-500 hover:bg-white hover:text-slate-900 hover:shadow-sm' }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-            <span class="font-bold text-sm">Settings</span>
+            <span class="font-bold text-sm">Search</span>
         </a>
     </div>
 

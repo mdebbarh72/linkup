@@ -20,7 +20,6 @@ class ProfileSeeder extends Seeder
             [
                 'user_id' => '4',
                 'bio' => 'there are no men like me, there only me',
-                'lien_photo' => '/../user/images',
             ]
         );
     }
