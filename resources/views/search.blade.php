@@ -20,19 +20,19 @@
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @foreach($users as $user)
-                    <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md transition duration-300 flex flex-col items-center">
+                    <a href="{{ route('profile.show', $user) }}" class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition duration-300 flex flex-col items-center group">
                         <div class="relative mb-3">
                              <img src="{{ $user->avatar_url }}" alt="{{ $user->full_name }}" class="w-20 h-20 rounded-full object-cover border-2 border-slate-100">
                         </div>
                         
-                        <h3 class="font-bold text-base text-slate-900 mb-0.5 text-center">{{ $user->full_name }}</h3>
+                        <h3 class="font-bold text-base text-slate-900 mb-0.5 text-center group-hover:text-blue-600 transition">{{ $user->full_name }}</h3>
                         <p class="text-xs text-indigo-600 font-medium mb-3">{{ $user->profile->pseudo ? '@'.$user->profile->pseudo : 'New Member' }}</p>
                         
                         <p class="text-slate-500 text-xs mb-4 line-clamp-2 px-2 text-center h-8">
                             {{ $user->profile->bio }}
                         </p>
 
-                        <div class="w-full mt-auto">
+                        <div class="w-full mt-auto" onclick="event.stopPropagation(); event.preventDefault();">
                             @if(Auth::id() !== $user->id)
                                 @if(Auth::user()->isFriendWith($user))
                                     <button disabled class="w-full py-2 rounded-lg bg-emerald-50 text-emerald-700 font-semibold text-xs border border-emerald-100 flex items-center justify-center gap-1.5 opacity-80">
@@ -63,7 +63,7 @@
                                 </a>
                             @endif
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
         @endif

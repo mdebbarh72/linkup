@@ -57,31 +57,26 @@ class ProfileController extends Controller
 public function customize(CustomizeProfileRequest $request)
 {
     $user = $request->user();
-
     
-    $user->profile->update([
-        'pseudo' => $request->validated('pseudo'),
-    ]);
-
-    
+    // Get or create profile
     $profile = $user->profile()->firstOrCreate([]); 
 
-    $profile = $user->profile()->firstOrCreate([]); 
-
+    // Prepare data for update, excluding the image file
     $data = $request->safe()->except(['lien_photo']);
 
-    
+    // Handle profile image upload
     if ($request->hasFile('lien_photo')) {
-        
         $path = $request->file('lien_photo')->store('profiles', 'public');
 
         if ($profile->image) {
+            // Delete old image and update with new one
             Storage::disk('public')->delete($profile->image->path);
             $profile->image->update([
                 'path' => $path,
                 'disk' => 'public'
             ]);
         } else {
+            // Create new image record
             $profile->image()->create([
                 'path' => $path,
                 'disk' => 'public'
@@ -89,7 +84,11 @@ public function customize(CustomizeProfileRequest $request)
         }
     }
 
-    $profile->update($data);
+    // Update profile with validated data (pseudo and/or bio if provided)
+    // Only updates fields that are present in the validated data
+    if (!empty($data)) {
+        $profile->update(array_filter($data, fn($value) => $value !== null));
+    }
 
     return back()->with('status', 'profile-customized');
 }
@@ -121,9 +120,9 @@ public function customize(CustomizeProfileRequest $request)
     {
         $posts = $user->posts()
             ->with(['images', 'likes', 'comments'])
-            ->withCount(['likes','comments'])
+            ->withCount(['likes', 'comments'])
             ->latest()
-            ->get();
+            ->paginate(10);
 
         return view('profile.show', [
             'user' => $user,

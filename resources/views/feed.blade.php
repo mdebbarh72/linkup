@@ -25,23 +25,28 @@
             <x-create-post-form />
         </x-modal>
 
-        @forelse($posts as $post)
-            <x-post-card :post="$post" />
-        @empty
-            <div class="bg-white p-12 rounded-3xl shadow-soft text-center border border-slate-100">
-                <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">📭</div>
-                <h2 class="text-xl font-bold text-slate-800 mb-2">It's quiet here...</h2>
-                <p class="text-slate-500">Add friends to see their stories and updates!</p>
-                <a href="{{ route('search') }}" class="inline-block mt-6 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-600/20">
-                    Find Friends
-                </a>
-            </div>
-        @endforelse
+        <!-- Posts Feed -->
+        <div class="space-y-6">
+            @forelse($posts as $post)
+                <x-post-card :post="$post" />
+            @empty
+                <div class="bg-white p-12 rounded-3xl shadow-soft text-center border border-slate-100">
+                    <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">📭</div>
+                    <h2 class="text-xl font-bold text-slate-800 mb-2">It's quiet here...</h2>
+                    <p class="text-slate-500">Add friends to see their stories and updates!</p>
+                    <a href="{{ route('search') }}" class="inline-block mt-6 px-6 py-3 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-600/20">
+                        Find Friends
+                    </a>
+                </div>
+            @endforelse
+        </div>
 
         <!-- Pagination -->
-        <div class="mt-8">
-            {{ $posts->links() }}
-        </div>
+        @if($posts->hasPages())
+            <div class="mt-8">
+                {{ $posts->links() }}
+            </div>
+        @endif
     </div>
 
     <script>

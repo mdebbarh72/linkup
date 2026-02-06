@@ -46,8 +46,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected static function booted()
     {
         static::created(function (User $user) {
+            $pseudo = \App\Helpers\PseudoGenerator::generate($user->first_name);
+            
             $user->profile()->create([
-                'pseudo' => null,
+                'pseudo' => $pseudo,
                 'bio' => null,
             ]);
         });

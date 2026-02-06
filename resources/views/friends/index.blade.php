@@ -19,23 +19,21 @@
         <!-- My Friends List -->
         <div x-show="activeTab === 'friends'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
             @forelse($friends as $friend)
-                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition duration-300 flex items-center gap-3">
-                    <a href="{{ route('profile.show', $friend) }}" class="flex items-center gap-3 flex-1 min-w-0">
-                        <img src="{{ $friend->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-slate-100">
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-bold text-slate-900 truncate text-sm hover:text-blue-600 transition">{{ $friend->full_name }}</h3>
-                            <p class="text-slate-500 text-xs truncate">{{ $friend->profile->pseudo ? '@'.$friend->profile->pseudo : '' }}</p>
-                        </div>
-                    </a>
+                <a href="{{ route('profile.show', $friend) }}" class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-200 transition duration-300 flex items-center gap-3 group">
+                    <img src="{{ $friend->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-slate-100">
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-slate-900 truncate text-sm group-hover:text-blue-600 transition">{{ $friend->full_name }}</h3>
+                        <p class="text-slate-500 text-xs truncate">{{ $friend->profile->pseudo ? '@'.$friend->profile->pseudo : '' }}</p>
+                    </div>
                     <!-- Actions Menu -->
-                   <form action="{{ route('friends.remove', $friend->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this friend?');">
+                   <form action="{{ route('friends.remove', $friend->id) }}" method="POST" class="relative z-10">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition border border-transparent hover:border-rose-100">
+                        <button type="button" onclick="event.preventDefault(); event.stopPropagation(); if(confirm('Are you sure you want to remove this friend?')) this.closest('form').submit();" class="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition border border-transparent hover:border-rose-100">
                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>
                         </button>
                    </form>
-                </div>
+                </a>
             @empty
                 <div class="col-span-full bg-white rounded-xl border border-slate-200 p-12 text-center">
                     <div class="w-16 h-16 bg-slate-50 text-slate-400 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -115,19 +113,24 @@
                      <h3 class="text-xl font-bold text-slate-900" x-text="selectedRequest?.sender.first_name + ' ' + selectedRequest?.sender.last_name"></h3>
                      <p class="text-slate-500 text-sm mb-6" x-text="selectedRequest?.pseudo ? '@' + selectedRequest?.pseudo : ''"></p>
                      
-                     <div class="grid grid-cols-2 gap-3">
-                        <form :action="'/friends/' + selectedRequest?.id + '/accept'" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-sm hover:bg-slate-800 transition">
-                                Accept
-                            </button>
-                        </form>
-                        <form :action="'/friends/' + selectedRequest?.id + '/refuse'" method="POST" class="w-full">
-                            @csrf
-                            <button type="submit" class="w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition">
-                                Ignore
-                            </button>
-                        </form>
+                     <div class="flex flex-col gap-3">
+                        <a :href="'/profile/' + selectedRequest?.sender.id" class="w-full py-2.5 rounded-xl bg-blue-600 text-white font-semibold text-sm hover:bg-blue-700 transition text-center">
+                            View Profile
+                        </a>
+                        <div class="grid grid-cols-2 gap-3">
+                            <form :action="'/friends/' + selectedRequest?.id + '/accept'" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full py-2.5 rounded-xl bg-slate-900 text-white font-semibold text-sm hover:bg-slate-800 transition">
+                                    Accept
+                                </button>
+                            </form>
+                            <form :action="'/friends/' + selectedRequest?.id + '/refuse'" method="POST" class="w-full">
+                                @csrf
+                                <button type="submit" class="w-full py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition">
+                                    Ignore
+                                </button>
+                            </form>
+                        </div>
                      </div>
                 </div>
             </div>

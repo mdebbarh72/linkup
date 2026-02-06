@@ -16,12 +16,12 @@ class CustomizeProfileRequest extends FormRequest
     {
         return [
             'pseudo' => [
-                'required',
+                'nullable',
                 'string',
                 'min:3',
                 'max:50',
                 'regex:/^[a-zA-Z0-9_.]+$/',
-                Rule::unique('profiles', 'pseudo')->ignore($this->user()->id),
+                Rule::unique('profiles', 'pseudo')->ignore($this->user()->profile->id ?? null, 'id'),
             ],
 
             'bio' => [

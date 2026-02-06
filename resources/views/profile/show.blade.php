@@ -85,6 +85,13 @@
                     <p class="text-slate-500">This user hasn't shared anything yet.</p>
                 </div>
             @endforelse
+
+            <!-- Pagination -->
+            @if($posts->hasPages())
+                <div class="mt-8">
+                    {{ $posts->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
