@@ -19,6 +19,7 @@ class FeedController extends Controller
 
         $posts = \App\Models\Post::whereIn('user_id', $friendIds)
             ->with(['user.profile', 'images', 'likes', 'comments'])
+            ->withCount(['likes','comments'])
             ->latest()
             ->paginate(10);
 

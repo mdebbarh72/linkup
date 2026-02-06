@@ -87,4 +87,11 @@ class PostController extends Controller
 
         return back()->with('success', 'Post deleted.');
     }
+
+    public function show(Post $post)
+    {
+        $post->load(['user.profile', 'images', 'comments.user']);
+        $post->loadCount(['likes', 'comments']);
+        return view('post-detail', compact('post'));
+    }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\LikeController;
 use Illuminate\Database\Schema\PostgresSchemaState;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
@@ -49,6 +50,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/comment', [CommentController::class, 'create'])->name('comment.create');
     Route::post('/comment/{comment}', [CommentController::class, 'update'])->name('comment.update');
     Route::post('/comment/{comment}', [CommentController::class, 'delete'])->name('comment.delete');
+    Route::post('/post/{post}/like', [LikeController::class, 'toggle'])->name('post.like');
+    Route::get('/post/{post}', [PostController::class, 'show'])->name('post.show');
 
 });
 

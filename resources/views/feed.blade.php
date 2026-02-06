@@ -43,4 +43,15 @@
             {{ $posts->links() }}
         </div>
     </div>
+
+    <script>
+        // Restore scroll position when returning from post detail
+        window.addEventListener('DOMContentLoaded', function() {
+            const scrollPosition = sessionStorage.getItem('feedScrollPosition');
+            if (scrollPosition) {
+                window.scrollTo(0, parseInt(scrollPosition));
+                sessionStorage.removeItem('feedScrollPosition');
+            }
+        });
+    </script>
 </x-app-layout>

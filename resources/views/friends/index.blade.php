@@ -20,11 +20,13 @@
         <div x-show="activeTab === 'friends'" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
             @forelse($friends as $friend)
                 <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition duration-300 flex items-center gap-3">
-                    <img src="{{ $friend->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-slate-100">
-                    <div class="flex-1 min-w-0">
-                        <h3 class="font-bold text-slate-900 truncate text-sm">{{ $friend->full_name }}</h3>
-                        <p class="text-slate-500 text-xs truncate">{{ $friend->profile->pseudo ? '@'.$friend->profile->pseudo : '' }}</p>
-                    </div>
+                    <a href="{{ route('profile.show', $friend) }}" class="flex items-center gap-3 flex-1 min-w-0">
+                        <img src="{{ $friend->avatar_url }}" class="w-12 h-12 rounded-full object-cover border border-slate-100">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-bold text-slate-900 truncate text-sm hover:text-blue-600 transition">{{ $friend->full_name }}</h3>
+                            <p class="text-slate-500 text-xs truncate">{{ $friend->profile->pseudo ? '@'.$friend->profile->pseudo : '' }}</p>
+                        </div>
+                    </a>
                     <!-- Actions Menu -->
                    <form action="{{ route('friends.remove', $friend->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to remove this friend?');">
                         @csrf

@@ -121,6 +121,7 @@ public function customize(CustomizeProfileRequest $request)
     {
         $posts = $user->posts()
             ->with(['images', 'likes', 'comments'])
+            ->withCount(['likes','comments'])
             ->latest()
             ->get();
 

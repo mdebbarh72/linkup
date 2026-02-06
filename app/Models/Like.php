@@ -11,6 +11,19 @@ class Like extends Model
     /** @use HasFactory<\Database\Factories\LikeFactory> */
     use HasFactory;
 
+    protected $fillable = ['user_id', 'post_id'];
+
+    protected static function booted(): void
+    {
+        static::created(function(Like $like){
+            $like->post()->increment('likes_count');
+        });
+
+        static::deleted(function(Like $like){
+            $like->post()->decrement('likes_count');
+        });
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
